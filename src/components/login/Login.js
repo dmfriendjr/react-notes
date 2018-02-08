@@ -5,7 +5,7 @@ const Login = () => {
     <form className="form-inline">
       <div className="form-group mb-2">
         <label htmlFor="staticEmail2" className="sr-only">Email</label>
-        <input type="text" className="form-control" id="staticEmail2" value="email@example.com"/>
+        <input type="text" className="form-control" id="staticEmail2" />
       </div>
       <div className="form-group mx-sm-3 mb-2">
         <label htmlFor="inputPassword2" className="sr-only">Password</label>
