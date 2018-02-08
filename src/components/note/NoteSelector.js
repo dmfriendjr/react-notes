@@ -1,28 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const NoteSelector = ({notes}) => {
+const NoteSelector = ({notes, onNoteSelected}) => {
   return (
     <div className="col-3 border-right">
     <h1>Notes</h1>
-    {notes.map( (note, index) => <li key={index}>{note.name}</li>)}
+    <ul>
+    {notes.map( (note, index) => <li key={index} onClick={() => onNoteSelected(index)}>{note.name}</li>)}
+    </ul>
     </div>
   );
 };
 
 NoteSelector.propTypes = {
-  notes: PropTypes.array.isRequired
+  notes: PropTypes.array.isRequired,
+  onNoteSelected: PropTypes.func.isRequired
 };
-
-
-
-/*const mapDispatchToProps = (dispatch) => ({
-onSaveEditorState: (editorState) => {
-  dispatch({
-    type: 'UPDATE_EDITOR_STATE',
-    payload: editorState
-  });
-}
-});*/
 
 export default NoteSelector;

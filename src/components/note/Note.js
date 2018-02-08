@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {Editor, EditorState, RichUtils} from 'draft-js';
+import {Editor, EditorState, RichUtils, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
 import NoteSelector from './NoteSelector';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faBold from '@fortawesome/fontawesome-pro-regular/faBold';
@@ -12,25 +12,41 @@ const editorStyle = {
 
 const fakeNoteData = [
   {
-    name: 'Note1'
+    name: 'Note1',
+    editorState: EditorState.createWithContent(ContentState.createFromText('string here'))
   },
   {
-    name: 'Note2'
-  },
+    name: 'Note2',
+    editorState: EditorState.createWithContent(ContentState.createFromText('string2 here'))  },
   {
-    name: 'Note3'
+    name: 'Note3',
+    editorState: EditorState.createEmpty()
   }
 ];
+
+console.log(convertToRaw(fakeNoteData[0].editorState.getCurrentContent()));
 
 class Note extends React.Component {
   constructor(props){
     super(props);
-    this.state = {editorState: this.props.editorState};
-    this.onChange = (editorState) => this.setState({editorState});
+    this.state = {editorState: fakeNoteData[0].editorState};
+    this.onChange = (editorState) => {
+      this.setState({editorState: EditorState.push(editorState, editorState.getCurrentContent())});
+    };
+    this.onNoteSelected = this.onNoteSelected.bind(this);
+    this.noteIndex = 0;
+  }
+
+  onNoteSelected(noteIndex) {
+    this.noteIndex = noteIndex;
+    const newContentState = fakeNoteData[noteIndex].editorState.getCurrentContent();
+    const editorState = EditorState.push(this.state.editorState, newContentState, 'apply-entity');
+    //const selection = editorState.getSelection();
+    this.setState({editorState:editorState});
   }
 
   _onFocusClick() {
-    this.noteEditor.focus();
+    //this.noteEditor.focus();
   }
 
   _onBoldClick() {
@@ -39,8 +55,8 @@ class Note extends React.Component {
 
   _onSaveClick() {
     this.props.onSaveEditorState(this.state.editorState);
+    fakeNoteData[this.noteIndex].editorState = this.state.editorState;
   }
-  
 
   render() {
     return (
@@ -52,7 +68,7 @@ class Note extends React.Component {
           </div>
         </div>
         <div style={editorStyle} onClick={this._onFocusClick.bind(this)} className="row m-3 border rounded">
-          <NoteSelector notes={fakeNoteData} />
+          <NoteSelector notes={fakeNoteData} onNoteSelected={this.onNoteSelected} />
           <div className="col">
             <Editor editorState={this.state.editorState} onChange={this.onChange}
             ref={(editor) => this.noteEditor = editor} />
