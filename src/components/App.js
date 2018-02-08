@@ -2,14 +2,16 @@ import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import Home from './home/HomePage';
 import Header from './common/Header';
+import Note from './note/Note';
 
 class App extends React.Component {
   render() {
     return(
-     <div>
+     <div className="container-responsive">
        <Header/>
       <Switch>
-        <Route exact path='/testing' component={Home}/>
+        <Route exact path="/" component={Home}/>
+        <Route path="/note" component={Note}/>
       </Switch>
      </div> 
     );
