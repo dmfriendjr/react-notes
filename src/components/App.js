@@ -5,12 +5,10 @@ import Header from './common/Header';
 import Note from './note/Note';
 
 class App extends React.Component {
-
-
   render() {
     return(
      <div className="container-responsive h-100">
-       <Header/>
+      <Header/>
       <Switch>
         <Route exact path="/" component={Home}/>
         <Route path="/note" component={Note}/>

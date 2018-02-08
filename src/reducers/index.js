@@ -1,8 +1,8 @@
 // Set up your root reducer here...
  import { combineReducers } from 'redux';
-import notes from './noteReducer';
+import editorReducer from './editorReducer';
 
 
-const rootReducer = combineReducers({notes});
+const rootReducer = editorReducer; 
 
  export default rootReducer;
