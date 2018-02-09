@@ -31,6 +31,7 @@ class NoteEditor extends React.Component {
       <div className="h-75">
         <div className="row m-3">
           <div className="col">
+            <input type="text" value={this.props.noteTitle} onChange={this.props.onNoteTitleChanged} />
             <button onClick={this._onBoldClick.bind(this)}><FontAwesomeIcon icon={faBold}/></button>
             <button onClick={this.props.onNoteSaved}>Save</button>
           </div>
@@ -48,6 +49,8 @@ class NoteEditor extends React.Component {
 NoteEditor.propTypes = {
   editorState: PropTypes.object.isRequired,
   noteId: PropTypes.number.isRequired,
+  noteTitle: PropTypes.string.isRequired,
+  onNoteTitleChanged: PropTypes.func.isRequired,
   onNoteChanged: PropTypes.func.isRequired,
   onNoteSaved: PropTypes.func.isRequired
 };

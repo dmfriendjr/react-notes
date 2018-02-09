@@ -7,24 +7,27 @@ import NoteEditor from './NoteEditor';
 class NotePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({editorState: this.props.notesState[0].editorState, activeNoteId: 0});
+    this.state = ({editorState: this.props.notesState[0].editorState, activeNoteId: 0, noteTitle: this.props.notesState[0].name});
     this.onChange = (editorState) => this.setState({editorState: editorState});
     this.onNoteSelected = this.onNoteSelected.bind(this);
     this.onNoteSaved = this.onNoteSaved.bind(this);
+    this.onNoteTitleChanged = this.onNoteTitleChanged.bind(this);
   }
 
   onNoteSelected(noteId) {
     console.log('Note selected:', noteId);
-    this.setState({editorState: this.props.notesState[noteId].editorState, activeNoteId: noteId});
+    this.setState({editorState: this.props.notesState[noteId].editorState, activeNoteId: noteId, noteTitle: this.props.notesState[noteId].name});
+  }
+
+  onNoteTitleChanged(state) {
+    this.setState({noteTitle: state.target.value});
   }
 
   onNoteSaved() {
     console.log('Saving a note');
-    this.props.onSaveNotesState({id: this.state.activeNoteId, editorState: this.state.editorState, name: 'Note 3'});
+    this.props.onSaveNotesState({id: this.state.activeNoteId, editorState: this.state.editorState, name: this.state.noteTitle});
   }
 
-  onNoteChanged() {
-  }
 
   render() {
     return(
@@ -33,7 +36,12 @@ class NotePage extends React.Component {
         <NoteSelector notes={this.props.notesState} onNoteSelected={this.onNoteSelected} />
       </div>
       <div className="col-9">
-        <NoteEditor editorState={this.state.editorState} noteId={this.state.activeNoteId} onNoteSaved={this.onNoteSaved} onNoteChanged={this.onChange} />
+        <NoteEditor editorState={this.state.editorState}
+         noteId={this.state.activeNoteId} 
+         noteTitle={this.state.noteTitle}
+         onNoteSaved={this.onNoteSaved} 
+         onNoteTitleChanged={this.onNoteTitleChanged}
+         onNoteChanged={this.onChange} />
       </div>
     </div>
     );
