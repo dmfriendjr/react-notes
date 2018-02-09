@@ -38,7 +38,7 @@ class NoteEditor extends React.Component {
         </div>
         <div style={editorStyle} onClick={this._onFocusClick.bind(this)} className="row border rounded">
           <div className="col">
-            <Editor editorState={this.props.editorState} onChange={this.props.onNoteChanged} />
+            <Editor editorState={this.props.editorState} onChange={this.props.onNoteChanged} ref={(editor) => this.noteEditor = editor} />
           </div>
         </div>
       </div>
