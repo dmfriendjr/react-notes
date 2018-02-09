@@ -6,6 +6,9 @@ const editorReducer = (state = initialState.notesState, { payload, type }) => {
   switch(type) {
     case 'UPDATE_EDITOR_STATE':
     break;
+    case 'CREATE_NEW_NOTE':
+    return Object.assign({}, state, {notesState: [...state.notesState,payload]});
+    break;
     case 'SAVE_NOTES_STATE':
     return Object.assign({}, state, {notesState: updateObjectInArray(state.notesState, payload)});
     default:
