@@ -10,39 +10,24 @@ const editorStyle = {
   height: '100%'
 };
 
-const fakeNoteData = [
-  {
-    name: 'Note1',
-    editorState: EditorState.createWithContent(ContentState.createFromText('string here'))
-  },
-  {
-    name: 'Note2',
-    editorState: EditorState.createWithContent(ContentState.createFromText('string2 here'))  },
-  {
-    name: 'Note3',
-    editorState: EditorState.createEmpty()
-  }
-];
-
-console.log(convertToRaw(fakeNoteData[0].editorState.getCurrentContent()));
-
 class Note extends React.Component {
   constructor(props){
     super(props);
-    this.state = {editorState: fakeNoteData[0].editorState};
+
+    this.noteIndex = 0;
+    this.state = {editorState: this.props.notesState[this.noteIndex].editorState, notesState: this.props.notesState};
     this.onChange = (editorState) => {
       this.setState({editorState: EditorState.push(editorState, editorState.getCurrentContent())});
     };
     this.onNoteSelected = this.onNoteSelected.bind(this);
-    this.noteIndex = 0;
   }
 
   onNoteSelected(noteIndex) {
     this.noteIndex = noteIndex;
-    const newContentState = fakeNoteData[noteIndex].editorState.getCurrentContent();
-    const editorState = EditorState.push(this.state.editorState, newContentState, 'apply-entity');
+    //const newContentState = this.props.notesState[noteIndex].editorState.getCurrentContent();
+    //const editorState = EditorState.push(this.state.editorState, newContentState, 'apply-entity');
     //const selection = editorState.getSelection();
-    this.setState({editorState:editorState});
+    //this.setState({editorState:editorState});
   }
 
   _onFocusClick() {
@@ -54,8 +39,12 @@ class Note extends React.Component {
   }
 
   _onSaveClick() {
+   // let updatedNotes = this.props.notesState;
+    //updatedNotes[this.noteIndex].editorState = this.state.editorState;
+    //this.setState({notesState: updatedNotes});
     this.props.onSaveEditorState(this.state.editorState);
-    fakeNoteData[this.noteIndex].editorState = this.state.editorState;
+    let updatedNote = this.state.notesState[this.noteIndex];
+    updatedNote.editorState = this.state.editor;
   }
 
   render() {
@@ -68,9 +57,9 @@ class Note extends React.Component {
           </div>
         </div>
         <div style={editorStyle} onClick={this._onFocusClick.bind(this)} className="row m-3 border rounded">
-          <NoteSelector notes={fakeNoteData} onNoteSelected={this.onNoteSelected} />
+          <NoteSelector notes={this.props.notesState} onNoteSelected={this.onNoteSelected} />
           <div className="col">
-            <Editor editorState={this.state.editorState} onChange={this.onChange}
+            <Editor editorState={this.state.notesState[this.noteIndex].editorState} onChange={this.onChange}
             ref={(editor) => this.noteEditor = editor} />
           </div>
         </div>
@@ -81,18 +70,28 @@ class Note extends React.Component {
 
 Note.propTypes = {
   editorState: PropTypes.object.isRequired,
-  onSaveEditorState: PropTypes.func.isRequired
+  notesState: PropTypes.array.isRequired,
+  onSaveEditorState: PropTypes.func.isRequired,
+  onSaveNotesState: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({editorState}) => ({editorState});
+const mapStateToProps = ({editorState, notesState}) => ({editorState, notesState});
 
 const mapDispatchToProps = (dispatch) => ({
-onSaveEditorState: (editorState) => {
-  dispatch({
-    type: 'UPDATE_EDITOR_STATE',
-    payload: editorState
-  });
-}
+  onSaveEditorState: (editorState, id) => {
+    dispatch({
+      type: 'UPDATE_EDITOR_STATE',
+      payload: editorState,
+      id
+    });
+  },
+  onSaveNotesState: (noteState, id) => {
+    dispatch({
+      type: 'UPDATE_NOTES_STATE',
+      payload: noteState,
+      id
+    });
+  }
 });
 
 const ConnectedNote = connect(mapStateToProps, mapDispatchToProps)(Note);

@@ -6,7 +6,7 @@ const NoteSelector = ({notes, onNoteSelected}) => {
     <div className="col-3 border-right">
     <h1>Notes</h1>
     <ul>
-    {notes.map( (note, index) => <li key={index} onClick={() => onNoteSelected(index)}>{note.name}</li>)}
+    {notes.map( (note) => <li key={note.id} onClick={() => onNoteSelected(note.id)}>{note.name}</li>)}
     </ul>
     </div>
   );

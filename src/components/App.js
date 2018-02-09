@@ -2,7 +2,7 @@ import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import Home from './home/HomePage';
 import Header from './common/Header';
-import Note from './note/Note';
+import NotePage from './note/NotePage';
 
 class App extends React.Component {
   render() {
@@ -11,7 +11,7 @@ class App extends React.Component {
       <Header/>
       <Switch>
         <Route exact path="/" component={Home}/>
-        <Route path="/note" component={Note}/>
+        <Route path="/note" component={NotePage}/>
       </Switch>
      </div> 
     );
