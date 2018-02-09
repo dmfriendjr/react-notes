@@ -28,14 +28,13 @@ class NotePage extends React.Component {
     this.props.onSaveNotesState({id: this.state.activeNoteId, editorState: this.state.editorState, name: this.state.noteTitle});
   }
 
-
   render() {
     return(
-    <div>
-      <div className="col-3">
-        <NoteSelector notes={this.props.notesState} onNoteSelected={this.onNoteSelected} />
+    <div className="row">
+      <div className="col-2">
+        <NoteSelector notes={this.props.notesState} activeNoteId={this.state.activeNoteId} onNoteSelected={this.onNoteSelected} />
       </div>
-      <div className="col-9">
+      <div className="col-10">
         <NoteEditor editorState={this.state.editorState}
          noteId={this.state.activeNoteId} 
          noteTitle={this.state.noteTitle}

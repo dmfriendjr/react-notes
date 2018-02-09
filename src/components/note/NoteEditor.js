@@ -19,7 +19,7 @@ class NoteEditor extends React.Component {
   }
 
   _onFocusClick() {
-    //this.noteEditor.focus();
+    this.noteEditor.focus();
   }
 
   _onBoldClick() {
@@ -28,15 +28,15 @@ class NoteEditor extends React.Component {
 
   render() {
     return (
-      <div className="h-75">
-        <div className="row m-3">
+      <div className="h-100">
+        <div className="row">
           <div className="col">
             <input type="text" value={this.props.noteTitle} onChange={this.props.onNoteTitleChanged} />
             <button onClick={this._onBoldClick.bind(this)}><FontAwesomeIcon icon={faBold}/></button>
             <button onClick={this.props.onNoteSaved}>Save</button>
           </div>
         </div>
-        <div style={editorStyle} onClick={this._onFocusClick.bind(this)} className="row m-3 border rounded">
+        <div style={editorStyle} onClick={this._onFocusClick.bind(this)} className="row border rounded">
           <div className="col">
             <Editor editorState={this.props.editorState} onChange={this.props.onNoteChanged} />
           </div>
