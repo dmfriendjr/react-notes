@@ -13,8 +13,8 @@ const NoteSelector = ({notes, activeNote, onNoteCreated, actions}) => {
       <ul className="list-group">
         {notes.map( 
           (note) => 
-          (<li className={classnames('list-group-item', 
-            {active: note === activeNote})} 
+          (<li className=
+            {classnames('list-group-item', {active: activeNote ? note.id === activeNote.id : false})} 
             key={note.id} 
             onClick={() => actions.noteSelected(note.id)}>{note.name}</li>))}
       </ul>

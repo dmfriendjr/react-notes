@@ -1,19 +1,20 @@
-import {EditorState, ContentState} from 'draft-js';
+import {EditorState, ContentState, convertToRaw} from 'draft-js';
 
 let notes = [
   {
     id: 0,
     name: 'Note1',
-    editorState: EditorState.createWithContent(ContentState.createFromText('string here'))
+    content: convertToRaw(EditorState.createWithContent(ContentState.createFromText('string here')).getCurrentContent())
   },
   {
     id: 1,
     name: 'Note2',
-    editorState: EditorState.createWithContent(ContentState.createFromText('string2 here'))  },
+    content: convertToRaw(EditorState.createWithContent(ContentState.createFromText('string2 here')).getCurrentContent()) 
+  },
   {
     id: 2,
     name: 'Note3',
-    editorState: EditorState.createEmpty()
+    content: convertToRaw(EditorState.createWithContent(ContentState.createFromText('string3 here')).getCurrentContent())
   }
 ];
 
@@ -29,7 +30,7 @@ class NoteApi {
       let newNote = {
         id: notes.length,
         name: 'New Note',
-        editorState: EditorState.createEmpty()
+        content: '' 
       };
       notes.push(newNote);
       resolve(newNote);
