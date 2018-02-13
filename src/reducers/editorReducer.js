@@ -1,31 +1,17 @@
-import {EditorState} from 'draft-js';
 import initialState from '../store/initialState';
+import * as types from '../actions/actionTypes';
 
-
-const editorReducer = (state = initialState.notesState, { payload, type }) => {
-  switch(type) {
+export default function editorReducer(state = initialState, action) {
+  switch(action.type) {
     case 'UPDATE_EDITOR_STATE':
     break;
-    case 'CREATE_NEW_NOTE':
-    return Object.assign({}, state, {notesState: [...state.notesState,payload]});
-    break;
-    case 'SAVE_NOTES_STATE':
-    return Object.assign({}, state, {notesState: updateObjectInArray(state.notesState, payload)});
+    case types.LOAD_NOTES_SUCCESS:
+      return Object.assign({}, state, {notes: action.notes});
+    case types.CREATE_NOTE_SUCCESS:
+      return Object.assign({}, state, {notes: [...state.notes,action.note]});
+    case types.SAVE_NOTE_SUCCESS:
+      return Object.assign({}, state, {notes: [...state.notes.filter(note => note.id != action.note.id), action.note]});
     default:
       return state; 
   }
 };
-
-function updateObjectInArray(array, action) {
-  return array.map( (item) => {
-      if(item.id !== action.id) {
-          // This isn't the item we care about - keep it as-is
-          return item;
-      }
-
-      // Otherwise, this is the one we want - return an updated value
-      return action;    
-  });
-}
-
-export default editorReducer;

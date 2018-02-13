@@ -1,15 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {EditorState} from 'draft-js';
 import NoteSelector from './NoteSelector';
 import NoteEditor from './NoteEditor';
+import * as editorActions from '../../actions/editorActions';
+import { bindActionCreators } from 'redux';
 
 class NotePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({editorState: this.props.notesState[0].editorState, activeNoteId: 0, noteTitle: this.props.notesState[0].name});
-
+    this.state = ({activeNoteId: 0});
     this.onChange = (editorState) => this.setState({editorState: editorState});
     this.onNoteSelected = this.onNoteSelected.bind(this);
     this.onNoteSaved = this.onNoteSaved.bind(this);
@@ -18,13 +19,11 @@ class NotePage extends React.Component {
   }
 
   onNoteSelected(noteId) {
-    console.log('Note selected:', noteId);
-    console.log(this.props.notesState[noteId]);
-    this.setState({editorState: this.props.notesState[noteId].editorState, activeNoteId: noteId, noteTitle: this.props.notesState[noteId].name});
+    this.setState({editorState: this.props.notes[noteId].editorState, activeNoteId: noteId, noteTitle: this.props.notes[noteId].name});
   }
 
   onNoteCreated() {
-    this.props.onNoteCreated(this.props.notesState.length);
+    this.props.onNoteCreated(this.props.notes.length);
   }
 
   onNoteTitleChanged(state) {
@@ -32,23 +31,30 @@ class NotePage extends React.Component {
   }
 
   onNoteSaved() {
-    console.log('Saving a note');
-    this.props.onSaveNotesState({id: this.state.activeNoteId, editorState: this.state.editorState, name: this.state.noteTitle});
+    this.props.actions.saveNote({id: this.state.activeNoteId, editorState: this.state.editorState, name: this.state.noteTitle});
   }
 
   render() {
+    let editorDisplay = null;
+
+    if (this.props.notes.length !== 0) {
+      editorDisplay = (<NoteEditor editorState={this.state.editorState || this.props.notes[this.state.activeNoteId].editorState}
+      noteId={this.state.activeNoteId} 
+      noteTitle={this.props.notes[this.state.activeNoteId].name}
+      onNoteSaved={this.onNoteSaved} 
+      onNoteTitleChanged={this.onNoteTitleChanged}
+      onNoteChanged={this.onChange} />);    
+    } else {
+      editorDisplay = <h1 className="text-center">Create a note to start!</h1>;
+    }
+
     return(
     <div className="row">
-      <div className="col-2">
-        <NoteSelector notes={this.props.notesState} activeNoteId={this.state.activeNoteId} onNoteSelected={this.onNoteSelected} onNoteCreated={this.onNoteCreated} />
+      <div className="col-2 ml-2">
+        <NoteSelector notes={this.props.notes} activeNoteId={this.state.activeNoteId} onNoteSelected={this.onNoteSelected} onNoteCreated={this.props.actions.createNewNote} />
       </div>
-      <div className="col-10">
-        <NoteEditor editorState={this.state.editorState}
-         noteId={this.state.activeNoteId} 
-         noteTitle={this.state.noteTitle}
-         onNoteSaved={this.onNoteSaved} 
-         onNoteTitleChanged={this.onNoteTitleChanged}
-         onNoteChanged={this.onChange} />
+      <div className="col-9 ml-2">
+        {editorDisplay}
       </div>
     </div>
     );
@@ -56,12 +62,13 @@ class NotePage extends React.Component {
 }
 
 NotePage.propTypes = {
-  notesState: PropTypes.array.isRequired,
+  notes: PropTypes.array.isRequired,
   onNoteCreated: PropTypes.func.isRequired,
-  onSaveNotesState: PropTypes.func.isRequired
+  onSaveNotesState: PropTypes.func.isRequired,
+  actions:  PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({notesState}) => ({notesState});
+const mapStateToProps = ({notes}) => ({notes});
 
 const mapDispatchToProps = (dispatch) => ({
   onSaveNotesState: (noteState) => {
@@ -75,7 +82,8 @@ const mapDispatchToProps = (dispatch) => ({
       type: 'CREATE_NEW_NOTE',
       payload: {id: id, name: 'Untitled', editorState: EditorState.createEmpty()}
     });
-  }
+  },
+  actions: bindActionCreators(editorActions,dispatch)
 });
 
 const ConnectedNotePage = connect(mapStateToProps, mapDispatchToProps)(NotePage);

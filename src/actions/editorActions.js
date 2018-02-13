@@ -1,0 +1,43 @@
+import * as types from './actionTypes';
+import noteApi from '../api/mockApi'; 
+
+export function saveNoteSuccess(note) {
+  return {type: types.SAVE_NOTE_SUCCESS, note};
+}
+
+export function loadNotesSuccess(notes) {
+  return {type: types.LOAD_NOTES_SUCCESS, notes};
+}
+
+export function createNoteSuccess(note) {
+  return {type: types.CREATE_NOTE_SUCCESS, note};
+}
+
+export function loadNotes() {
+  return dispatch => {
+    return noteApi.getAllNotes().then(notes => {
+      dispatch(loadNotesSuccess(notes));
+    }).catch(error => {
+      throw(error);
+    });
+  };
+}
+
+export function saveNote(note) {
+  return dispatch => {
+    return noteApi.saveNote(note).then( (note) => {
+      dispatch(saveNoteSuccess(note));
+    }).catch(error => {
+      throw(error);
+    });
+  };
+}
+
+export function createNewNote() {
+  return dispatch => {
+    return noteApi.createNewNote().then( (note) => {
+      console.log('Create notes result:',note);
+      dispatch(createNoteSuccess(note));
+    });
+  };
+}

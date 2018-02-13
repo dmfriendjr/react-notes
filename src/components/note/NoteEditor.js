@@ -23,7 +23,7 @@ class NoteEditor extends React.Component {
   }
 
   _onBoldClick() {
-    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
+    this.props.onNoteChanged(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
   }
 
   render() {
