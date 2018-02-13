@@ -48,7 +48,7 @@ class NoteEditor extends React.Component {
 
 NoteEditor.propTypes = {
   editorState: PropTypes.object.isRequired,
-  noteId: PropTypes.number.isRequired,
+  noteId: PropTypes.string.isRequired,
   noteTitle: PropTypes.string.isRequired,
   onNoteTitleChanged: PropTypes.func.isRequired,
   onNoteChanged: PropTypes.func.isRequired,

@@ -10,14 +10,26 @@ class NoteApi {
     });
   }
 
+  static guid() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+      s4() + '-' + s4() + s4() + s4();
+  }
+
   static createNewNote() {
+    let id = this.guid();
     return new Promise((resolve) => {
       let newNote = {
-        id: notes.length,
+        id: id,
         name: 'New Note',
         content: convertToRaw(EditorState.createEmpty().getCurrentContent())
       };
       notes.push(newNote);
+      console.log('Added new note, resolving:', newNote);
       resolve(newNote);
     });
   }
@@ -33,7 +45,7 @@ class NoteApi {
     return new Promise((resolve) => {
       note = Object.assign({}, note); //to avoid manipulating data passed in
       notes = notes.filter(n => n.id != note.id);
-      notes.push(note);
+      notes.unshift(note);
       resolve(note); 
     });
   }

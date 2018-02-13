@@ -35,7 +35,6 @@ const mapDispatchToProps = (dispatch) => ({
 NoteSelector.propTypes = {
   notes: PropTypes.array.isRequired,
   activeNote: PropTypes.object,
-  onNoteCreated: PropTypes.func.isRequired,
   onDeleteNoteClicked: PropTypes.func.isRequired,
   actions: PropTypes.object.isRequired
 };
