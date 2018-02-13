@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import * as editorActions from '../../actions/editorActions';
 import { bindActionCreators } from 'redux';
 
-const NoteSelector = ({notes, activeNote, onNoteCreated, actions}) => {
+const NoteSelector = ({notes, activeNote, onNoteCreated, onDeleteNoteClicked, actions}) => {
   return (
     <div className="d-flex flex-column justify-content-center">
       <button onClick={onNoteCreated} className="btn btn-success mb-3">New Note</button>
@@ -16,7 +16,11 @@ const NoteSelector = ({notes, activeNote, onNoteCreated, actions}) => {
           (<li className=
             {classnames('list-group-item', {active: activeNote ? note.id === activeNote.id : false})} 
             key={note.id} 
-            onClick={() => actions.noteSelected(note.id)}>{note.name}</li>))}
+            onClick={() => actions.noteSelected(note.id)}>{note.name}
+            <button type="button" onClick={(event) => {event.stopPropagation(); onDeleteNoteClicked(note.id);}} className="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </li>))}
       </ul>
     </div>
   );
@@ -32,6 +36,7 @@ NoteSelector.propTypes = {
   notes: PropTypes.array.isRequired,
   activeNote: PropTypes.object,
   onNoteCreated: PropTypes.func.isRequired,
+  onDeleteNoteClicked: PropTypes.func.isRequired,
   actions: PropTypes.object.isRequired
 };
 

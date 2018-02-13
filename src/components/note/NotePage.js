@@ -16,6 +16,7 @@ class NotePage extends React.Component {
     this.onChange = (editorState) => this.setState({editorState: editorState});
     this.onNoteSaved = this.onNoteSaved.bind(this);
     this.onNoteTitleChanged = this.onNoteTitleChanged.bind(this);
+    this.onDeleteNoteClicked = this.onDeleteNoteClicked.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,6 +36,9 @@ class NotePage extends React.Component {
     this.props.actions.saveNote(saveState);
   }
 
+  onDeleteNoteClicked(noteId) {
+    this.props.actions.deleteNote(noteId);
+  }
   render() {
     let editorDisplay = null;
 
@@ -52,7 +56,7 @@ class NotePage extends React.Component {
     return(
     <div className="row">
       <div className="col-2 ml-2">
-        <NoteSelector notes={this.props.notes} onNoteCreated={this.props.actions.createNewNote} />
+        <NoteSelector notes={this.props.notes} onDeleteNoteClicked={this.onDeleteNoteClicked} onNoteCreated={this.props.actions.createNewNote} />
       </div>
       <div className="col-9 ml-2">
         {editorDisplay}

@@ -30,10 +30,17 @@ class NoteApi {
       let newNote = {
         id: notes.length,
         name: 'New Note',
-        content: '' 
+        content: convertToRaw(EditorState.createEmpty().getCurrentContent())
       };
       notes.push(newNote);
       resolve(newNote);
+    });
+  }
+
+  static deleteNote(noteId) {
+    return new Promise((resolve, reject) => {
+      notes = notes.filter(note => note.id != noteId);
+      resolve(notes);
     });
   }
 

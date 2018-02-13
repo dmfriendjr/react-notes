@@ -5,6 +5,10 @@ export function saveNoteSuccess(note) {
   return {type: types.SAVE_NOTE_SUCCESS, note};
 }
 
+export function deleteNoteSuccess(notes) {
+  return {type: types.DELETE_NOTE_SUCCESS, notes};
+}
+
 export function loadNotesSuccess(notes) {
   return {type: types.LOAD_NOTES_SUCCESS, notes};
 }
@@ -23,6 +27,14 @@ export function loadNotes() {
       dispatch(loadNotesSuccess(notes));
     }).catch(error => {
       throw(error);
+    });
+  };
+}
+
+export function deleteNote(noteId) {
+  return dispatch => {
+    return noteApi.deleteNote(noteId).then((notes) => {
+      dispatch(deleteNoteSuccess(notes));
     });
   };
 }
