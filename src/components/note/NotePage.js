@@ -12,14 +12,15 @@ class NotePage extends React.Component {
     super(props);
     this.state = ({activeNoteId: 0});
     this.onChange = (editorState) => this.setState({editorState: editorState});
-    this.onNoteSelected = this.onNoteSelected.bind(this);
     this.onNoteSaved = this.onNoteSaved.bind(this);
     this.onNoteTitleChanged = this.onNoteTitleChanged.bind(this);
     this.onNoteCreated = this.onNoteCreated.bind(this);
   }
 
-  onNoteSelected(noteId) {
-    this.setState({editorState: this.props.notes[noteId].editorState, activeNoteId: noteId, noteTitle: this.props.notes[noteId].name});
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.activeNote && nextProps.activeNote != this.props.activeNote) {
+      this.setState({editorState: nextProps.activeNote.editorState});
+    }
   }
 
   onNoteCreated() {
@@ -37,21 +38,21 @@ class NotePage extends React.Component {
   render() {
     let editorDisplay = null;
 
-    if (this.props.notes.length !== 0) {
-      editorDisplay = (<NoteEditor editorState={this.state.editorState || this.props.notes[this.state.activeNoteId].editorState}
+    if (this.props.activeNote) {
+      editorDisplay = (<NoteEditor editorState={this.state.editorState || this.props.activeNote.editorState}
       noteId={this.state.activeNoteId} 
       noteTitle={this.props.notes[this.state.activeNoteId].name}
       onNoteSaved={this.onNoteSaved} 
       onNoteTitleChanged={this.onNoteTitleChanged}
       onNoteChanged={this.onChange} />);    
     } else {
-      editorDisplay = <h1 className="text-center">Create a note to start!</h1>;
+      editorDisplay = <h1 className="text-center">Select a note</h1>;
     }
 
     return(
     <div className="row">
       <div className="col-2 ml-2">
-        <NoteSelector notes={this.props.notes} activeNoteId={this.state.activeNoteId} onNoteSelected={this.onNoteSelected} onNoteCreated={this.props.actions.createNewNote} />
+        <NoteSelector notes={this.props.notes} onNoteCreated={this.props.actions.createNewNote} />
       </div>
       <div className="col-9 ml-2">
         {editorDisplay}
@@ -63,12 +64,13 @@ class NotePage extends React.Component {
 
 NotePage.propTypes = {
   notes: PropTypes.array.isRequired,
+  activeNote: PropTypes.object,
   onNoteCreated: PropTypes.func.isRequired,
   onSaveNotesState: PropTypes.func.isRequired,
   actions:  PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({notes}) => ({notes});
+const mapStateToProps = ({notes, activeNote}) => ({notes, activeNote});
 
 const mapDispatchToProps = (dispatch) => ({
   onSaveNotesState: (noteState) => {

@@ -5,6 +5,8 @@ export default function editorReducer(state = initialState, action) {
   switch(action.type) {
     case 'UPDATE_EDITOR_STATE':
     break;
+    case 'NOTE_SELECTED':
+      return Object.assign({}, state, {activeNote: state.notes.filter(note => note.id === action.noteId)[0]});
     case types.LOAD_NOTES_SUCCESS:
       return Object.assign({}, state, {notes: action.notes});
     case types.CREATE_NOTE_SUCCESS:
@@ -14,4 +16,4 @@ export default function editorReducer(state = initialState, action) {
     default:
       return state; 
   }
-};
+}

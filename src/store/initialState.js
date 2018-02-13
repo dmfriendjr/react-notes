@@ -1,5 +1,6 @@
 const initialState = {
-  notes: []
+  notes: [],
+  activeNote: null,
 };
 
 export default initialState;

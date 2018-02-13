@@ -1,6 +1,6 @@
 import {EditorState, ContentState} from 'draft-js';
 
-let notes = [];/*[
+let notes = [
   {
     id: 0,
     name: 'Note1',
@@ -11,11 +11,11 @@ let notes = [];/*[
     name: 'Note2',
     editorState: EditorState.createWithContent(ContentState.createFromText('string2 here'))  },
   {
-    // id: 2,
+    id: 2,
     name: 'Note3',
     editorState: EditorState.createEmpty()
   }
-];*/
+];
 
 class NoteApi {
   static getAllNotes() {

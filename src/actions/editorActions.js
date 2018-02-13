@@ -13,6 +13,10 @@ export function createNoteSuccess(note) {
   return {type: types.CREATE_NOTE_SUCCESS, note};
 }
 
+export function noteSelected(noteId) {
+  return {type: types.NOTE_SELECTED, noteId};
+}
+
 export function loadNotes() {
   return dispatch => {
     return noteApi.getAllNotes().then(notes => {
@@ -36,7 +40,6 @@ export function saveNote(note) {
 export function createNewNote() {
   return dispatch => {
     return noteApi.createNewNote().then( (note) => {
-      console.log('Create notes result:',note);
       dispatch(createNoteSuccess(note));
     });
   };
