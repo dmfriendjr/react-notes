@@ -31,7 +31,7 @@ class NoteEditor extends React.Component {
       <div className="h-100">
         <div className="row">
           <div className="col">
-            <input type="text" value={this.props.noteTitle} onChange={this.props.onNoteTitleChanged} />
+            <input type="text" value={this.props.noteTitle} onChange={(event) => this.props.onNoteTitleChanged(event.target.value)} />
             <button onClick={this._onBoldClick.bind(this)}><FontAwesomeIcon icon={faBold}/></button>
             <button onClick={this.props.onNoteSaved}>Save</button>
           </div>

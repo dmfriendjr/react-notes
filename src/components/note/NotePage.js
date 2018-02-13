@@ -26,8 +26,10 @@ class NotePage extends React.Component {
     }
   }
 
-  onNoteTitleChanged(state) {
-    this.setState({noteTitle: state.target.value});
+  onNoteTitleChanged(title) {
+    let noteState = Object.assign({}, this.state.note);
+    noteState.name = title;
+    this.setState({note: noteState});
   }
 
   onNoteSaved() {
