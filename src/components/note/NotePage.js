@@ -10,21 +10,17 @@ import { bindActionCreators } from 'redux';
 class NotePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = ({activeNoteId: 0});
+    this.state = props.activeNote ? {note: Object.assign({}, props.activeNote)} : {note: undefined};
     this.onChange = (editorState) => this.setState({editorState: editorState});
     this.onNoteSaved = this.onNoteSaved.bind(this);
     this.onNoteTitleChanged = this.onNoteTitleChanged.bind(this);
-    this.onNoteCreated = this.onNoteCreated.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.activeNote && nextProps.activeNote != this.props.activeNote) {
-      this.setState({editorState: nextProps.activeNote.editorState});
+      let noteState = Object.assign({}, nextProps.activeNote);
+      this.setState({note: noteState, editorState: noteState.editorState});
     }
-  }
-
-  onNoteCreated() {
-    this.props.onNoteCreated(this.props.notes.length);
   }
 
   onNoteTitleChanged(state) {
@@ -32,16 +28,18 @@ class NotePage extends React.Component {
   }
 
   onNoteSaved() {
-    this.props.actions.saveNote({id: this.state.activeNoteId, editorState: this.state.editorState, name: this.state.noteTitle});
+    let saveState = Object.assign({}, this.state.note);
+    saveState.editorState = this.state.editorState;
+    this.props.actions.saveNote(saveState);
   }
 
   render() {
     let editorDisplay = null;
 
-    if (this.props.activeNote) {
+    if (this.state.note) {
       editorDisplay = (<NoteEditor editorState={this.state.editorState || this.props.activeNote.editorState}
-      noteId={this.state.activeNoteId} 
-      noteTitle={this.props.notes[this.state.activeNoteId].name}
+      noteId={this.state.note.id} 
+      noteTitle={this.state.note.name}
       onNoteSaved={this.onNoteSaved} 
       onNoteTitleChanged={this.onNoteTitleChanged}
       onNoteChanged={this.onChange} />);    
@@ -65,26 +63,12 @@ class NotePage extends React.Component {
 NotePage.propTypes = {
   notes: PropTypes.array.isRequired,
   activeNote: PropTypes.object,
-  onNoteCreated: PropTypes.func.isRequired,
-  onSaveNotesState: PropTypes.func.isRequired,
   actions:  PropTypes.object.isRequired
 };
 
 const mapStateToProps = ({notes, activeNote}) => ({notes, activeNote});
 
 const mapDispatchToProps = (dispatch) => ({
-  onSaveNotesState: (noteState) => {
-    dispatch({
-      type: 'SAVE_NOTES_STATE',
-      payload: noteState 
-    });
-  },
-  onNoteCreated: (id) => {
-    dispatch({
-      type: 'CREATE_NEW_NOTE',
-      payload: {id: id, name: 'Untitled', editorState: EditorState.createEmpty()}
-    });
-  },
   actions: bindActionCreators(editorActions,dispatch)
 });
 
