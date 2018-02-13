@@ -1,32 +1,17 @@
 import {EditorState, ContentState, convertToRaw} from 'draft-js';
 
 let notes = [
-  {
-    id: 0,
-    name: 'Note1',
-    content: convertToRaw(EditorState.createWithContent(ContentState.createFromText('string here')).getCurrentContent())
-  },
-  {
-    id: 1,
-    name: 'Note2',
-    content: convertToRaw(EditorState.createWithContent(ContentState.createFromText('string2 here')).getCurrentContent()) 
-  },
-  {
-    id: 2,
-    name: 'Note3',
-    content: convertToRaw(EditorState.createWithContent(ContentState.createFromText('string3 here')).getCurrentContent())
-  }
 ];
 
 class NoteApi {
   static getAllNotes() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
      resolve(Object.assign([], notes));
     });
   }
 
   static createNewNote() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let newNote = {
         id: notes.length,
         name: 'New Note',
@@ -38,14 +23,14 @@ class NoteApi {
   }
 
   static deleteNote(noteId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       notes = notes.filter(note => note.id != noteId);
       resolve(notes);
     });
   }
 
   static saveNote(note) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       note = Object.assign({}, note); //to avoid manipulating data passed in
       notes = notes.filter(n => n.id != note.id);
       notes.push(note);

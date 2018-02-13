@@ -5,10 +5,10 @@ import classnames from 'classnames';
 import * as editorActions from '../../actions/editorActions';
 import { bindActionCreators } from 'redux';
 
-const NoteSelector = ({notes, activeNote, onNoteCreated, onDeleteNoteClicked, actions}) => {
+const NoteSelector = ({notes, activeNote, onDeleteNoteClicked, actions}) => {
   return (
     <div className="d-flex flex-column justify-content-center">
-      <button onClick={onNoteCreated} className="btn btn-success mb-3">New Note</button>
+      <button onClick={actions.createNewNote} className="btn btn-success mb-3">New Note</button>
       <h3 className="text-center">Notes</h3>
       <ul className="list-group">
         {notes.map( 

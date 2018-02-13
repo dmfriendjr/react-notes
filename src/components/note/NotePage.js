@@ -56,7 +56,7 @@ class NotePage extends React.Component {
     return(
     <div className="row">
       <div className="col-2 ml-2">
-        <NoteSelector notes={this.props.notes} onDeleteNoteClicked={this.onDeleteNoteClicked} onNoteCreated={this.props.actions.createNewNote} />
+        <NoteSelector notes={this.props.notes} onDeleteNoteClicked={this.onDeleteNoteClicked}/>
       </div>
       <div className="col-9 ml-2">
         {editorDisplay}
