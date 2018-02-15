@@ -19,7 +19,7 @@ export default {
   entry: path.resolve(__dirname, 'client/src/index'),
   target: 'web',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'client/dist'),
     publicPath: '/',
     filename: '[name].[chunkhash].js'
   },

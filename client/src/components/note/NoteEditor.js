@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Editor, RichUtils} from 'draft-js';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import faBold from '@fortawesome/fontawesome-pro-regular/faBold';
+// import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+// import faBold from '@fortawesome/fontawesome-pro-regular/faBold';
 
 const editorStyle = {
   height: '100%'
@@ -32,7 +32,7 @@ class NoteEditor extends React.Component {
         <div className="row">
           <div className="col">
             <input type="text" value={this.props.noteTitle} onChange={(event) => this.props.onNoteTitleChanged(event.target.value)} />
-            <button onClick={this._onBoldClick.bind(this)}><FontAwesomeIcon icon={faBold}/></button>
+            <button onClick={this._onBoldClick.bind(this)}>Bold</button>
             <button onClick={this.props.onNoteSaved}>Save</button>
           </div>
         </div>

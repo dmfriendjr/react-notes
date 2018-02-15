@@ -74,7 +74,7 @@ NotePage.propTypes = {
   actions:  PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({notes, activeNote}) => ({notes, activeNote});
+const mapStateToProps = (state) => ({notes: state.editor.notes, activeNote: state.editor.activeNote});
 
 const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(editorActions,dispatch)

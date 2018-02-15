@@ -1,7 +1,7 @@
 import initialState from '../store/initialState';
 import * as types from '../actions/actionTypes';
 
-export default function editorReducer(state = initialState, action) {
+export default function editorReducer(state = initialState.editor, action) {
   switch(action.type) {
     case 'NOTE_SELECTED':
       return Object.assign({}, state, {activeNote: state.notes.filter(note => note.id === action.noteId)[0]});
