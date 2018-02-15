@@ -5,7 +5,7 @@ import configureStore from './store/configureStore';
 import initialState from './store/initialState';
 import {BrowserRouter} from 'react-router-dom';
 import App from './components/App';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import {loadNotes} from './actions/editorActions';
 
 const store = configureStore(initialState);

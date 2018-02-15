@@ -50,7 +50,6 @@ export function saveNote(note) {
 }
 
 export function createNewNote() {
-  console.log('Creating new note callback started');
   return dispatch => {
     return noteApi.createNewNote().then( (note) => {
       dispatch(createNoteSuccess(note));

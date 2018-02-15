@@ -1,4 +1,4 @@
-import {EditorState, ContentState, convertToRaw} from 'draft-js';
+import {EditorState, convertToRaw} from 'draft-js';
 
 let notes = [
 ];
@@ -29,7 +29,6 @@ class NoteApi {
         content: convertToRaw(EditorState.createEmpty().getCurrentContent())
       };
       notes.push(newNote);
-      console.log('Added new note, resolving:', newNote);
       resolve(newNote);
     });
   }

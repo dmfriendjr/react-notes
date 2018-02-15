@@ -9,10 +9,10 @@ export default {
   devtool: 'cheap-module-eval-source-map', // more info:https://webpack.js.org/guides/development/#using-source-maps and https://webpack.js.org/configuration/devtool/
   entry: [
     // must be first entry to properly set public path
-    './src/webpack-public-path',
+    './client/src/webpack-public-path',
     'react-hot-loader/patch',
     'webpack-hot-middleware/client?reload=true',
-    path.resolve(__dirname, 'src/index.js') // Defining path seems necessary for this to work consistently on Windows machines.
+    path.resolve(__dirname, 'client/src/index.js') // Defining path seems necessary for this to work consistently on Windows machines.
   ],
   target: 'web',
   output: {
@@ -28,7 +28,7 @@ export default {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({     // Create HTML file that includes references to bundled CSS and JS.
-      template: 'src/index.ejs',
+      template: 'client/src/index.ejs',
       minify: {
         removeComments: true,
         collapseWhitespace: true
@@ -114,7 +114,7 @@ export default {
           }, {
             loader: 'sass-loader',
             options: {
-              includePaths: [path.resolve(__dirname, 'src', 'scss')],
+              includePaths: [path.resolve(__dirname, 'client/src', 'scss')],
               sourceMap: true
             }
           }

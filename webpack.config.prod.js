@@ -16,7 +16,7 @@ export default {
     extensions: ['*', '.js', '.jsx', '.json']
   },
   devtool: 'source-map', // more info:https://webpack.js.org/guides/production/#source-mapping and https://webpack.js.org/configuration/devtool/
-  entry: path.resolve(__dirname, 'src/index'),
+  entry: path.resolve(__dirname, 'client/src/index'),
   target: 'web',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -35,8 +35,8 @@ export default {
 
     // Generate HTML file that contains references to generated bundles. See here for how this works: https://github.com/ampedandwired/html-webpack-plugin#basic-usage
     new HtmlWebpackPlugin({
-      template: 'src/index.ejs',
-      favicon: 'src/favicon.ico',
+      template: 'client/src/index.ejs',
+      favicon: 'client/src/favicon.ico',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -147,7 +147,7 @@ export default {
             }, {
               loader: 'sass-loader',
               options: {
-                includePaths: [path.resolve(__dirname, 'src', 'scss')],
+                includePaths: [path.resolve(__dirname, 'client/src', 'scss')],
                 sourceMap: true
               }
             }
