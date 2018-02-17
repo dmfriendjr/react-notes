@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import * as editorActions from '../../actions/editorActions';
 import { bindActionCreators } from 'redux';
+import { withFirebase } from 'react-redux-firebase'; 
 
 const NoteSelector = ({notes, activeNote, onDeleteNoteClicked, actions}) => {
   return (
@@ -26,7 +27,7 @@ const NoteSelector = ({notes, activeNote, onDeleteNoteClicked, actions}) => {
   );
 };
 
-const mapStateToProps = ({activeNote}) => ({activeNote});
+const mapStateToProps = (state) => ({activeNote: state.editor.activeNote});
 
 const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(editorActions,dispatch)

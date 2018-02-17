@@ -11,8 +11,9 @@ class NotePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = props.activeNote ? 
-      {note: Object.assign({}, props.activeNote), editorState: EditorState.createWithContent(convertFromRaw(props.activeNote.content))} 
-      : {note: undefined};
+      {note: Object.assign({}, props.activeNote), 
+             editorState: EditorState.createWithContent(convertFromRaw(props.activeNote.content))} 
+      : {note: null};
     this.onChange = (editorState) => this.setState({editorState: editorState});
     this.onNoteSaved = this.onNoteSaved.bind(this);
     this.onNoteTitleChanged = this.onNoteTitleChanged.bind(this);
@@ -20,6 +21,9 @@ class NotePage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.activeNote === null) {
+      this.setState({note: null, editorState: null});
+    }
     if (nextProps.activeNote && nextProps.activeNote != this.props.activeNote) {
       let noteState = Object.assign({}, nextProps.activeNote);
       this.setState({note: noteState, editorState: EditorState.createWithContent(convertFromRaw(nextProps.activeNote.content))});
@@ -41,6 +45,7 @@ class NotePage extends React.Component {
   onDeleteNoteClicked(noteId) {
     this.props.actions.deleteNote(noteId);
   }
+
   render() {
     let editorDisplay = null;
 
