@@ -12,7 +12,11 @@ export default function editorReducer(state = initialState.editor, action) {
     case types.SAVE_NOTE_SUCCESS:
       return Object.assign({}, state, {activeNote: action.note, notes: [action.note, ...state.notes.filter(note => note.id != action.note.id)]});
     case types.DELETE_NOTE_SUCCESS:
-      return Object.assign({}, state, {notes: [...state.notes.filter(note => note.id != action.noteId)]});
+      return Object.assign({}, state, 
+        {
+          activeNote: state.activeNote ? (state.activeNote.id === action.noteId ? null : state.activeNote) : null,
+          notes: [...state.notes.filter(note => note.id != action.noteId)]
+        });
     default:
       return state; 
   }
