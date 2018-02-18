@@ -2,7 +2,7 @@ import React from 'react';
 import {NavLink} from 'react-router-dom';
 import Login from '../login/Login';
 
-const Header = (props) => {
+const Header = () => {
   return (
     <nav className="navbar navbar-light bg-light">
       <NavLink
