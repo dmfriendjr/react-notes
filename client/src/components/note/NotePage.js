@@ -5,7 +5,8 @@ import {EditorState, convertFromRaw, convertToRaw} from 'draft-js';
 import NoteSelector from './NoteSelector';
 import NoteEditor from './NoteEditor';
 import * as editorActions from '../../actions/editorActions';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
+import { withFirebase, isLoaded, isEmpty, firebaseConnect } from 'react-redux-firebase';
 
 class NotePage extends React.Component {
   constructor(props) {
@@ -39,7 +40,7 @@ class NotePage extends React.Component {
   onNoteSaved() {
     let saveState = Object.assign({}, this.state.note);
     saveState.content = convertToRaw(this.state.editorState.getCurrentContent());
-    this.props.actions.saveNote(saveState);
+    this.props.actions.saveNote(saveState, this.props.firebase, this.props.auth.uid);
   }
 
   onDeleteNoteClicked(noteId) {
@@ -48,43 +49,64 @@ class NotePage extends React.Component {
 
   render() {
     let editorDisplay = null;
-
-    if (this.state.editorState) {
-      editorDisplay = (<NoteEditor editorState={this.state.editorState}
-      noteId={this.state.note.id} 
-      noteTitle={this.state.note.name}
-      onNoteSaved={this.onNoteSaved} 
-      onNoteTitleChanged={this.onNoteTitleChanged}
-      onNoteChanged={this.onChange} />);    
+    if (this.props.auth.isEmpty) {
+      return (
+        <div className="row">
+          <div className="col-12 text-center">
+            <h1>Please Login To Use Application</h1>
+          </div>
+        </div>
+      );
     } else {
-      editorDisplay = <h1 className="text-center">Select a note</h1>;
-    }
+      if (this.state.editorState) {
+        editorDisplay = (<NoteEditor editorState={this.state.editorState}
+        noteId={this.state.note.id} 
+        noteTitle={this.state.note.name}
+        onNoteSaved={this.onNoteSaved} 
+        onNoteTitleChanged={this.onNoteTitleChanged}
+        onNoteChanged={this.onChange} />);    
+      } else {
+        editorDisplay = <h1 className="text-center">Select a note</h1>;
+      }
 
-    return(
-    <div className="row">
-      <div className="col-2 ml-2">
-        <NoteSelector notes={this.props.notes} onDeleteNoteClicked={this.onDeleteNoteClicked}/>
+      return(
+      <div className="row">
+        <div className="col-2 ml-2">
+          <NoteSelector notes={this.props.notes} onDeleteNoteClicked={this.onDeleteNoteClicked}/>
+        </div>
+        <div className="col-9 ml-2">
+          {editorDisplay}
+        </div>
       </div>
-      <div className="col-9 ml-2">
-        {editorDisplay}
-      </div>
-    </div>
-    );
+      );
+    }
   }
 }
 
 NotePage.propTypes = {
   notes: PropTypes.array.isRequired,
   activeNote: PropTypes.object,
-  actions:  PropTypes.object.isRequired
+  auth: PropTypes.object,
+  actions:  PropTypes.object.isRequired,
+  firebase: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state) => ({notes: state.editor.notes, activeNote: state.editor.activeNote});
+const mapStateToProps = (state) => (
+  {
+   notesTest: state.firebase.data.notes, 
+   notes: state.editor.notes,
+   activeNote: state.editor.activeNote
+  });
 
 const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(editorActions,dispatch)
 });
 
-const ConnectedNotePage = connect(mapStateToProps, mapDispatchToProps)(NotePage);
-
-export default ConnectedNotePage;
+// export default ConnectedNotePage;
+export default compose (
+  connect( ({firebase}) => ({auth: firebase.auth})),
+  firebaseConnect(({auth}) => [
+    { path: `notes/${auth.uid}`}
+  ]),
+  connect(mapStateToProps, mapDispatchToProps)
+)(NotePage);

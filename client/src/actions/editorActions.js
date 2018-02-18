@@ -39,10 +39,12 @@ export function deleteNote(noteId) {
   };
 }
 
-export function saveNote(note) {
+export function saveNote(note, firebase, uid) {
   return dispatch => {
-    return noteApi.saveNote(note).then( (note) => {
-      dispatch(saveNoteSuccess(note));
+    return firebase.set(`notes/${uid}`, note).then(() => {
+        dispatch(saveNoteSuccess(note));
+    // return noteApi.saveNote(note).then( (note) => {
+    //   dispatch(saveNoteSuccess(note));
     }).catch(error => {
       throw(error);
     });
