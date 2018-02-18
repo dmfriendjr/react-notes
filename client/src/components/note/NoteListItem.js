@@ -17,6 +17,10 @@ class NoteListItem extends React.Component {
   }
 
   onDeleteClicked() {
+    if (this.state.confirmDelete) {
+      return;
+    }
+
     this.setState({confirmDelete: true});
 
     this.onDeleteTimeout = setTimeout(() => {
@@ -25,32 +29,44 @@ class NoteListItem extends React.Component {
   }
 
   render() {
-    let deleteButton;
-
-    if (this.state.confirmDelete) {
-      deleteButton = 
-      (<button type="button" onClick={(event) => {event.stopPropagation(); this.props.onDeleteNoteClicked(this.props.note.id);}} className="btn btn-danger ml-3" aria-label="Close">
-        <span aria-hidden="true">Confirm</span>
-      </button>);
-    } else {
-      deleteButton =  (<button type="button" onClick={(event) => 
-        {
-          event.stopPropagation();
-          this.onDeleteClicked();
-        }} 
-      className="close" aria-label="Close">
+    let deleteButton = 
+      (<button type="button" 
+          onClick={(event) => 
+            {
+              event.stopPropagation();
+              this.onDeleteClicked();
+            }} 
+          className="close" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>);
-    }
+    let noteDisplay =
+      (<li className=
+          {classnames('list-group-item', {active: this.props.isActive})} 
+          onClick={() => this.props.onNoteSelected(this.props.note.id)}>
+        {this.props.note.name}
+        {deleteButton}
+      </li>);
 
-    return (
-      <li className=
-        {classnames('list-group-item', {active: this.props.isActive})} 
-        key={this.props.note.id} 
-        onClick={() => this.props.onNoteSelected(this.props.note.id)}>{this.props.note.name}
-        {deleteButton} 
-      </li>
-    );
+    if (this.state.confirmDelete) {
+      return(
+        <div>
+          {noteDisplay}
+          <li className="list-group-item bg-danger text-white mb-3"
+            onClick={(event) => {
+              event.stopPropagation();
+              this.props.onDeleteNoteClicked(this.props.note.id);
+            }}>
+          Confirm Delete
+          </li>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          {noteDisplay}
+        </div>
+      );
+    }
   }
 }
 
