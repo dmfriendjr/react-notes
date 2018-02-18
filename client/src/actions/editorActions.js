@@ -1,5 +1,4 @@
 import * as types from './actionTypes';
-import noteApi from '../api/mockApi';
 import {EditorState, convertToRaw} from 'draft-js';
 
 export function saveNoteSuccess(note) {

@@ -36,7 +36,6 @@ class NotePage extends React.Component {
   }
 
   onNewNoteClicked() {
-    console.log('Dispatching new note event');
     this.props.actions.createNewNote(this.props.firebase, this.props.auth.uid);
   }
 
