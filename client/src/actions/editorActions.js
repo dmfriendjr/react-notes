@@ -1,5 +1,6 @@
 import * as types from './actionTypes';
-import noteApi from '../api/mockApi'; 
+import noteApi from '../api/mockApi';
+import {EditorState, convertToRaw} from 'draft-js';
 
 export function saveNoteSuccess(note) {
   return {type: types.SAVE_NOTE_SUCCESS, note};
@@ -21,10 +22,19 @@ export function noteSelected(noteId) {
   return {type: types.NOTE_SELECTED, noteId};
 }
 
-export function loadNotes() {
+export function loadNotes(firebase, uid) {
   return dispatch => {
-    return noteApi.getAllNotes().then(notes => {
+    return firebase.ref().child(`notes/${uid}`).once('value').then((snapshot) => {
+      console.log(JSON.parse(Object.values(snapshot.val())[0].content));
+      let notes = Object.values(snapshot.val());
+      console.log('Pre:', notes);
+      for(let i = 0; i < notes.length; i++) {
+        notes[i].content = JSON.parse(notes[i].content);
+      }
+      console.log('Post:', notes);
       dispatch(loadNotesSuccess(notes));
+    // return noteApi.getAllNotes().then(notes => {
+    //   dispatch(loadNotesSuccess(notes));
     }).catch(error => {
       throw(error);
     });
@@ -41,20 +51,28 @@ export function deleteNote(noteId) {
 
 export function saveNote(note, firebase, uid) {
   return dispatch => {
-    return firebase.set(`notes/${uid}`, note).then(() => {
+    let noteToSave = Object.assign({}, note);
+    noteToSave.content = JSON.stringify(noteToSave.content);
+    return firebase.set(`notes/${uid}/${note.id}`, noteToSave).then(() => {
         dispatch(saveNoteSuccess(note));
-    // return noteApi.saveNote(note).then( (note) => {
-    //   dispatch(saveNoteSuccess(note));
     }).catch(error => {
       throw(error);
     });
   };
 }
 
-export function createNewNote() {
+export function createNewNote(firebase, uid) {
   return dispatch => {
-    return noteApi.createNewNote().then( (note) => {
-      dispatch(createNoteSuccess(note));
+    let key = firebase.ref().child(`notes`).push().key;
+    let newNote = { 
+      id: key,
+      name: 'New Note',
+      //Have to create a raw blank state here and stringify for storage in firebase
+      content: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent()))
+    };
+    return firebase.set(`notes/${uid}/${key}`, newNote).then( () => {
+      newNote.content = JSON.parse(newNote.content);
+      dispatch(createNoteSuccess(newNote));
     });
   };
 }

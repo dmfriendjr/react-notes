@@ -19,16 +19,27 @@ class NotePage extends React.Component {
     this.onNoteSaved = this.onNoteSaved.bind(this);
     this.onNoteTitleChanged = this.onNoteTitleChanged.bind(this);
     this.onDeleteNoteClicked = this.onDeleteNoteClicked.bind(this);
+    this.onNewNoteClicked = this.onNewNoteClicked.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+    if (this.props.auth.isEmpty && !nextProps.auth.isEmpty) {
+      this.props.actions.loadNotes(nextProps.firebase, nextProps.auth.uid);
+    }
     if (nextProps.activeNote === null) {
       this.setState({note: null, editorState: null});
     }
-    if (nextProps.activeNote && nextProps.activeNote != this.props.activeNote) {
+    else if (nextProps.activeNote && nextProps.activeNote != this.props.activeNote) {
+      console.log('Making active note match new active note', nextProps.activeNote.content);
       let noteState = Object.assign({}, nextProps.activeNote);
+      console.log(nextProps.activeNote.content);
       this.setState({note: noteState, editorState: EditorState.createWithContent(convertFromRaw(nextProps.activeNote.content))});
     }
+  }
+
+  onNewNoteClicked() {
+    this.props.actions.createNewNote(this.props.firebase, this.props.auth.uid);
   }
 
   onNoteTitleChanged(title) {
@@ -52,7 +63,7 @@ class NotePage extends React.Component {
     if (this.props.auth.isEmpty) {
       return (
         <div className="row">
-          <div className="col-12 text-center">
+          <div className="col-12">
             <h1>Please Login To Use Application</h1>
           </div>
         </div>
@@ -72,7 +83,9 @@ class NotePage extends React.Component {
       return(
       <div className="row">
         <div className="col-2 ml-2">
-          <NoteSelector notes={this.props.notes} onDeleteNoteClicked={this.onDeleteNoteClicked}/>
+          <NoteSelector notes={this.props.notes}
+           onNewNoteClicked={this.onNewNoteClicked} 
+           onDeleteNoteClicked={this.onDeleteNoteClicked}/>
         </div>
         <div className="col-9 ml-2">
           {editorDisplay}

@@ -51,7 +51,7 @@ const store = createStoreWithFirebase(rootReducer, initialState, composeEnhancer
   applyMiddleware(...middlewares)
 ));
 
-store.dispatch(loadNotes());
+// store.dispatch(loadNotes());
 
 render (
   <Provider store={store}>
