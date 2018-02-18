@@ -17,6 +17,8 @@ export default function editorReducer(state = initialState.editor, action) {
           activeNote: state.activeNote ? (state.activeNote.id === action.noteId ? null : state.activeNote) : null,
           notes: [...state.notes.filter(note => note.id != action.noteId)]
         });
+    case types.CLEAR_NOTES_STORE:
+      return Object.assign({}, state, {activeNote: null, notes: []});
     default:
       return state; 
   }

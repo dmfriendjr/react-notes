@@ -79,7 +79,7 @@ class NotePage extends React.Component {
 
       return(
       <div className="row">
-        <div className="col-2 ml-2">
+        <div className="col-md-2 col-12 ml-2">
           <NoteSelector notes={this.props.notes}
            onNewNoteClicked={this.onNewNoteClicked} 
            onDeleteNoteClicked={this.onDeleteNoteClicked}/>
@@ -112,7 +112,6 @@ const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(editorActions,dispatch)
 });
 
-// export default ConnectedNotePage;
 export default compose (
   connect( ({firebase}) => ({auth: firebase.auth})),
   firebaseConnect(({auth}) => [

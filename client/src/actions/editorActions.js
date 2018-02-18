@@ -21,6 +21,10 @@ export function noteSelected(noteId) {
   return {type: types.NOTE_SELECTED, noteId};
 }
 
+export function clearNotesStore() {
+  return {type: types.CLEAR_NOTES_STORE};
+}
+
 export function loadNotes(firebase, uid) {
   return dispatch => {
     return firebase.ref().child(`notes/${uid}`).once('value').then((snapshot) => {

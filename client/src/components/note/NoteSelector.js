@@ -5,6 +5,8 @@ import classnames from 'classnames';
 import * as editorActions from '../../actions/editorActions';
 import { bindActionCreators } from 'redux';
 
+import NoteListItem from './NoteListItem';
+
 const NoteSelector = ({notes, activeNote, onDeleteNoteClicked, onNewNoteClicked, actions}) => {
   return (
     <div className="d-flex flex-column justify-content-center">
@@ -13,14 +15,13 @@ const NoteSelector = ({notes, activeNote, onDeleteNoteClicked, onNewNoteClicked,
       <ul className="list-group">
         {notes.map( 
           (note) => 
-          (<li className=
-            {classnames('list-group-item', {active: activeNote ? note.id === activeNote.id : false})} 
-            key={note.id} 
-            onClick={() => actions.noteSelected(note.id)}>{note.name}
-            <button type="button" onClick={(event) => {event.stopPropagation(); onDeleteNoteClicked(note.id);}} className="close" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            </li>))}
+            (<NoteListItem 
+            key={note.id}
+            note={note} 
+            isActive={activeNote ? note.id === activeNote.id : false} 
+            onNoteSelected={actions.noteSelected} 
+            onDeleteNoteClicked={onDeleteNoteClicked} />)
+            )}
       </ul>
     </div>
   );
