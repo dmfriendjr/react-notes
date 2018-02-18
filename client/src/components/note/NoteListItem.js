@@ -34,6 +34,7 @@ class NoteListItem extends React.Component {
           onClick={(event) => 
             {
               event.stopPropagation();
+              event.target.parentNode.blur();
               this.onDeleteClicked();
             }} 
           className="close" aria-label="Close">
