@@ -7,7 +7,6 @@ import initialState from './store/initialState';
 import {BrowserRouter} from 'react-router-dom';
 import App from './components/App';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import {loadNotes} from './actions/editorActions';
 import firebase from 'firebase';
 import rootReducer from './reducers';
 

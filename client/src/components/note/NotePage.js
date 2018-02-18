@@ -6,7 +6,7 @@ import NoteSelector from './NoteSelector';
 import NoteEditor from './NoteEditor';
 import * as editorActions from '../../actions/editorActions';
 import { bindActionCreators, compose } from 'redux';
-import { withFirebase, isLoaded, isEmpty, firebaseConnect } from 'react-redux-firebase';
+import { firebaseConnect } from 'react-redux-firebase';
 
 class NotePage extends React.Component {
   constructor(props) {
@@ -23,7 +23,6 @@ class NotePage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (this.props.auth.isEmpty && !nextProps.auth.isEmpty) {
       this.props.actions.loadNotes(nextProps.firebase, nextProps.auth.uid);
     }
@@ -31,9 +30,7 @@ class NotePage extends React.Component {
       this.setState({note: null, editorState: null});
     }
     else if (nextProps.activeNote && nextProps.activeNote != this.props.activeNote) {
-      console.log('Making active note match new active note', nextProps.activeNote.content);
       let noteState = Object.assign({}, nextProps.activeNote);
-      console.log(nextProps.activeNote.content);
       this.setState({note: noteState, editorState: EditorState.createWithContent(convertFromRaw(nextProps.activeNote.content))});
     }
   }

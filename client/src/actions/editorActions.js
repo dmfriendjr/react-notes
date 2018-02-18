@@ -25,16 +25,11 @@ export function noteSelected(noteId) {
 export function loadNotes(firebase, uid) {
   return dispatch => {
     return firebase.ref().child(`notes/${uid}`).once('value').then((snapshot) => {
-      console.log(JSON.parse(Object.values(snapshot.val())[0].content));
       let notes = Object.values(snapshot.val());
-      console.log('Pre:', notes);
       for(let i = 0; i < notes.length; i++) {
         notes[i].content = JSON.parse(notes[i].content);
       }
-      console.log('Post:', notes);
       dispatch(loadNotesSuccess(notes));
-    // return noteApi.getAllNotes().then(notes => {
-    //   dispatch(loadNotesSuccess(notes));
     }).catch(error => {
       throw(error);
     });
