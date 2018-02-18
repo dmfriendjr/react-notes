@@ -6,8 +6,8 @@ export function saveNoteSuccess(note) {
   return {type: types.SAVE_NOTE_SUCCESS, note};
 }
 
-export function deleteNoteSuccess(notes) {
-  return {type: types.DELETE_NOTE_SUCCESS, notes};
+export function deleteNoteSuccess(noteId) {
+  return {type: types.DELETE_NOTE_SUCCESS, noteId};
 }
 
 export function loadNotesSuccess(notes) {
@@ -25,9 +25,12 @@ export function noteSelected(noteId) {
 export function loadNotes(firebase, uid) {
   return dispatch => {
     return firebase.ref().child(`notes/${uid}`).once('value').then((snapshot) => {
-      let notes = Object.values(snapshot.val());
-      for(let i = 0; i < notes.length; i++) {
-        notes[i].content = JSON.parse(notes[i].content);
+      let notes = [];
+      if (snapshot.val()) {
+        notes = Object.values(snapshot.val());
+        for(let i = 0; i < notes.length; i++) {
+          notes[i].content = JSON.parse(notes[i].content);
+        }
       }
       dispatch(loadNotesSuccess(notes));
     }).catch(error => {
@@ -36,10 +39,10 @@ export function loadNotes(firebase, uid) {
   };
 }
 
-export function deleteNote(noteId) {
+export function deleteNote(noteId, firebase, uid) {
   return dispatch => {
-    return noteApi.deleteNote(noteId).then((notes) => {
-      dispatch(deleteNoteSuccess(notes));
+    return firebase.ref().child(`notes/${uid}/${noteId}`).remove().then(() => {
+      dispatch(deleteNoteSuccess(noteId));
     });
   };
 }
@@ -58,11 +61,10 @@ export function saveNote(note, firebase, uid) {
 
 export function createNewNote(firebase, uid) {
   return dispatch => {
-    let key = firebase.ref().child(`notes`).push().key;
+    let key = firebase.ref().child(`notes/${uid}`).push().key;
     let newNote = { 
       id: key,
       name: 'New Note',
-      //Have to create a raw blank state here and stringify for storage in firebase
       content: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent()))
     };
     return firebase.set(`notes/${uid}/${key}`, newNote).then( () => {

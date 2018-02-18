@@ -36,6 +36,7 @@ class NotePage extends React.Component {
   }
 
   onNewNoteClicked() {
+    console.log('Dispatching new note event');
     this.props.actions.createNewNote(this.props.firebase, this.props.auth.uid);
   }
 
@@ -52,7 +53,7 @@ class NotePage extends React.Component {
   }
 
   onDeleteNoteClicked(noteId) {
-    this.props.actions.deleteNote(noteId);
+    this.props.actions.deleteNote(noteId, this.props.firebase, this.props.auth.uid);
   }
 
   render() {
@@ -60,7 +61,7 @@ class NotePage extends React.Component {
     if (this.props.auth.isEmpty) {
       return (
         <div className="row">
-          <div className="col-12">
+          <div className="col-12 text-center">
             <h1>Please Login To Use Application</h1>
           </div>
         </div>
