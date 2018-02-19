@@ -41,23 +41,25 @@ class NoteListItem extends React.Component {
         <span aria-hidden="true">&times;</span>
       </button>);
     let noteDisplay =
-      (<li className=
-          {classnames('list-group-item', {active: this.props.isActive})} 
-          onClick={() => this.props.onNoteSelected(this.props.note.id)}>
+      (<li onClick={() => this.props.onNoteSelected(this.props.note.id)}>
+        <button className={classnames('btn btn-block btn-outline-info', {active: this.props.isActive})} >
         {this.props.note.name}
         {deleteButton}
+        </button>
       </li>);
 
     if (this.state.confirmDelete) {
       return(
         <div>
           {noteDisplay}
-          <li className="list-group-item bg-danger text-white mb-3"
-            onClick={(event) => {
-              event.stopPropagation();
-              this.props.onDeleteNoteClicked(this.props.note.id);
-            }}>
-          Confirm Delete
+          <li className="list-group-item mb-3">
+            <button className="col-12 btn btn-danger"
+              onClick={(event) => {
+                event.stopPropagation();
+                this.props.onDeleteNoteClicked(this.props.note.id);
+              }}>
+              Confirm Delete
+            </button>
           </li>
         </div>
       );

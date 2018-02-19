@@ -31,9 +31,12 @@ class NoteEditor extends React.Component {
       <div className="h-100">
         <div className="row">
           <div className="col">
-            <input type="text" value={this.props.noteTitle} onChange={(event) => this.props.onNoteTitleChanged(event.target.value)} />
-            <button onClick={this._onBoldClick.bind(this)}>Bold</button>
-            <button onClick={this.props.onNoteSaved}>Save</button>
+            <input type="text" 
+              className="mr-3"
+              value={this.props.noteTitle} 
+              onChange={(event) => this.props.onNoteTitleChanged(event.target.value)} />
+            <button className="btn btn-success" onClick={this.props.onNoteSaved}>Save</button>
+            <button className="btn btn-outline-dark" onClick={this._onBoldClick.bind(this)}>Bold</button>
           </div>
         </div>
         <div style={editorStyle} onClick={this._onFocusClick.bind(this)} className="row border rounded">
